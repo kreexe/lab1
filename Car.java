@@ -57,7 +57,7 @@ public abstract class Car implements Movable {
         currentSpeed = Math.max(currentSpeed - speedFactor() * amount, 0);
     }
 
-    // 🔒 Sanity checks (uppgift 4)
+    // Sanity checks 
     public void gas(double amount) {
         if (amount < 0 || amount > 1) return;
         incrementSpeed(amount);
@@ -68,7 +68,7 @@ public abstract class Car implements Movable {
         decrementSpeed(amount);
     }
 
-    // ===== Movable =====
+    // implementation av movable
     @Override
     public void move() {
         switch (direction) {
@@ -99,7 +99,7 @@ public abstract class Car implements Movable {
         }
     }
 
-    // Getters som testerna kräver
+    // getters för testerna
     public double getX() { return xPosition; }
     public double getY() { return yPosition; }
     public Direction getDirection() { return direction; }
