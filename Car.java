@@ -8,9 +8,9 @@ public abstract class Car implements Movable {
     protected Color color;
     protected String modelName;
 
-   
-    protected double xPosition = 0.0;
-    protected double yPosition = 0.0;
+    // Position & riktning (krävs av tester)
+    protected double xPosition = 0;
+    protected double yPosition = 0;
 
     protected enum Direction { NORTH, EAST, SOUTH, WEST }
     protected Direction direction = Direction.NORTH;
@@ -50,34 +50,31 @@ public abstract class Car implements Movable {
     protected abstract double speedFactor();
 
     protected void incrementSpeed(double amount) {
-        currentSpeed = Math.min(enginePower, currentSpeed + speedFactor() * amount);
+        currentSpeed = Math.min(currentSpeed + speedFactor() * amount, enginePower);
     }
 
     protected void decrementSpeed(double amount) {
-        currentSpeed = Math.max(0, currentSpeed - speedFactor() * amount);
+        currentSpeed = Math.max(currentSpeed - speedFactor() * amount, 0);
     }
 
-
+    // 🔒 Sanity checks (uppgift 4)
     public void gas(double amount) {
-        if (amount < 0 || amount > 1) {
-            return;
-        }
+        if (amount < 0 || amount > 1) return;
         incrementSpeed(amount);
     }
 
     public void brake(double amount) {
-        if (amount < 0 || amount > 1) {
-            return;
-        }
+        if (amount < 0 || amount > 1) return;
         decrementSpeed(amount);
     }
 
+    // ===== Movable =====
     @Override
     public void move() {
         switch (direction) {
             case NORTH -> yPosition += currentSpeed;
-            case EAST  -> xPosition += currentSpeed;
             case SOUTH -> yPosition -= currentSpeed;
+            case EAST  -> xPosition += currentSpeed;
             case WEST  -> xPosition -= currentSpeed;
         }
     }
@@ -102,6 +99,8 @@ public abstract class Car implements Movable {
         }
     }
 
+    // Getters som testerna kräver
     public double getX() { return xPosition; }
     public double getY() { return yPosition; }
+    public Direction getDirection() { return direction; }
 }
