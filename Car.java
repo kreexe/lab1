@@ -6,5 +6,4 @@ public abstract class Car extends Vehicle {
         super();
     }
 
-    // Car-specific helpers can go here (gas/brake/move are inherited from Vehicle).
 }

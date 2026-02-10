@@ -1,14 +1,13 @@
 import java.awt.*;
 
 public abstract class Vehicle implements Movable {
-
     protected int nrDoors;
     protected double enginePower;
     protected double currentSpeed;
     protected Color color;
     protected String modelName;
 
-    // Position & direction (required by tests)
+    // Position & riktning (krävs av tester) - ändrade till protected då vi behöver det för uppg 2
     protected double xPosition = 0;
     protected double yPosition = 0;
 
@@ -19,15 +18,33 @@ public abstract class Vehicle implements Movable {
         stopEngine();
     }
 
-    // Basic getters / setters
-    public int getNrDoors() { return nrDoors; }
-    public double getEnginePower() { return enginePower; }
-    public double getCurrentSpeed() { return currentSpeed; }
-    public Color getColor() { return color; }
-    public void setColor(Color clr) { color = clr; }
+    public int getNrDoors() {
+        return nrDoors;
+    }
 
-    public void startEngine() { currentSpeed = 0.1; }
-    public void stopEngine() { currentSpeed = 0; }
+    public double getEnginePower() {
+        return enginePower;
+    }
+
+    public double getCurrentSpeed() {
+        return currentSpeed;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color clr) {
+        color = clr;
+    }
+
+    public void startEngine() {
+        currentSpeed = 0.1;
+    }
+
+    public void stopEngine() {
+        currentSpeed = 0;
+    }
 
     protected abstract double speedFactor();
 
@@ -39,7 +56,7 @@ public abstract class Vehicle implements Movable {
         currentSpeed = Math.max(currentSpeed - speedFactor() * amount, 0);
     }
 
-    // Safety checks
+    // Sanity checks 
     public void gas(double amount) {
         if (amount < 0 || amount > 1) return;
         incrementSpeed(amount);
@@ -50,7 +67,7 @@ public abstract class Vehicle implements Movable {
         decrementSpeed(amount);
     }
 
-    // Movable implementation
+    // implementation av movable
     @Override
     public void move() {
         switch (direction) {
@@ -81,7 +98,7 @@ public abstract class Vehicle implements Movable {
         }
     }
 
-    // Position getters (used by tests)
+    // getters för testerna
     public double getX() { return xPosition; }
     public double getY() { return yPosition; }
     public Direction getDirection() { return direction; }
