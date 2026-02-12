@@ -1,3 +1,5 @@
+package Main;
+
 public class GeneralWorkshop extends Workshop<Car> {
     
     public GeneralWorkshop(int maxCap) {

@@ -1,3 +1,4 @@
+package Main;
 public class SaabWorkshop extends Workshop<Saab95> {
     
     public SaabWorkshop(int maxCap) {

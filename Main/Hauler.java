@@ -1,3 +1,4 @@
+package Main;
 import java.util.Stack;
 
 public abstract class Hauler extends Truck {
@@ -11,17 +12,18 @@ public abstract class Hauler extends Truck {
         super();
     }
 
-    public boolean loadCar(Car car) {
-        if (bedAngle != 0) return false;
-        if (loadedCars.size() >= MAXKAPACITET) return false;
-        
+   public Car loadCar(Car car) {
+        if (bedAngle != 0) return null;
+        if (loadedCars.size() >= MAXKAPACITET) return null;
+
         double dx = car.getX() - this.getX();
         double dy = car.getY() - this.getY();
         double distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance > LOADDISTANCE) return false;
+        if (distance > LOADDISTANCE) return null;
 
         loadedCars.push(car);
-        return true;
+        return car;
+
     }
 
     public Car unloadCar() {

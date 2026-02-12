@@ -1,3 +1,4 @@
+package Main;
 
 
 public abstract class Truck extends Vehicle {
