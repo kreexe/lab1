@@ -42,4 +42,22 @@ public class Workshop<T extends Car> {
     public boolean isEmpty() {
         return cars.isEmpty();
     }
+
+    public static class GeneralWorkshop extends Workshop<Car> {
+        public GeneralWorkshop(int maxCapacity) {
+            super(maxCapacity);
+        }
+    }
+
+    public static class VolvoWorkshop extends Workshop<Volvo240> {
+        public VolvoWorkshop(int maxCapacity) {
+            super(maxCapacity);
+        }
+    }
+
+    public static class SaabWorkshop extends Workshop<Saab95> {
+        public SaabWorkshop(int maxCapacity) {
+            super(maxCapacity);
+        }
+    }
 }
