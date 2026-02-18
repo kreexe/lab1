@@ -1,9 +1,10 @@
 package Main;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import javax.swing.Timer;
+import java.util.List;
 
 public class CarController {
 
@@ -11,32 +12,85 @@ public class CarController {
     private Timer timer = new Timer(delay, new TimerListener());
 
     private CarView frame;
-    private ArrayList<Vehicle> cars = new ArrayList<>();
+    private List<Vehicle> cars = new ArrayList<>();
+
+    private VolvoWorkshop workshop = new VolvoWorkshop(5);
 
     public CarController() {
 
-        // Skapa fordon
-        cars.add(new Volvo240());
-        cars.add(new Saab95());
-        cars.add(new Scania());
+        Volvo240 volvo = new Volvo240();
+        Saab95 saab = new Saab95();
+        Scania scania = new Scania();
 
-        // Skapa view
-        frame = new CarView("CarSim 1.0", this);
+        // 100px mellanrum 
+        volvo.xPosition = 0;
+        volvo.yPosition = 0;
+
+        saab.xPosition = 0;
+        saab.yPosition = 100;
+
+        scania.xPosition = 0;
+        scania.yPosition = 200;
+
+        cars.add(volvo);
+        cars.add(saab);
+        cars.add(scania);
+
+        frame = new CarView("CarSim 1.0", this, cars);
 
         timer.start();
     }
 
-    // Timer uppdaterar rörelse
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            for (Vehicle car : cars) {
+
+            int panelWidth = frame.drawPanel.getWidth();
+            int panelHeight = frame.drawPanel.getHeight();
+
+            int carWidth = 100;
+            int carHeight = 60;
+
+            for (int i = 0; i < cars.size(); i++) {
+
+                Vehicle car = cars.get(i);
                 car.move();
+
+                int x = (int) car.getX();
+                int y = (int) car.getY();
+
+                //  Väggstuds
+                if (x < 0 || x > panelWidth - carWidth) {
+                    car.turnLeft();
+                    car.turnLeft();
+                }
+
+                if (y < 0 || y > panelHeight - carHeight) {
+                    car.turnLeft();
+                    car.turnLeft();
+                }
+
+                // Workshop-zon i mitten
+                int workshopWidth = 200;
+                int workshopHeight = 200;
+                int wx = (panelWidth - workshopWidth) / 2;
+                int wy = (panelHeight - workshopHeight) / 2;
+
+                if (car instanceof Volvo240) {
+                    if (x > wx && x < wx + workshopWidth &&
+                        y > wy && y < wy + workshopHeight) {
+
+                        workshop.loadCar((Volvo240) car);
+                        cars.remove(i);
+                        i--;
+                        continue;
+                }
+                }
             }
+
             frame.repaint();
         }
     }
 
-   
 
     void gas(int amount) {
         double gas = amount / 100.0;
@@ -52,26 +106,31 @@ public class CarController {
         }
     }
 
-    void startEngine() {
+    void startAll() {
         for (Vehicle car : cars) {
             car.startEngine();
         }
     }
 
-    void stopEngine() {
+    void stopAll() {
         for (Vehicle car : cars) {
             car.stopEngine();
         }
     }
 
-    // Dessa behövs för CarView
-    void startAll() {
-        startEngine();
+    void turnLeft() {
+        for (Vehicle car : cars) {
+            car.turnLeft();
+        }
     }
 
-    void stopAll() {
-        stopEngine();
+    void turnRight() {
+        for (Vehicle car : cars) {
+            car.turnRight();
+        }
     }
+
+    //  SAAB TURBO 
 
     void turboOn() {
         for (Vehicle car : cars) {
@@ -89,6 +148,7 @@ public class CarController {
         }
     }
 
+    //  SCANIA FLAK 
 
     void liftBed() {
         for (Vehicle car : cars) {
@@ -106,13 +166,7 @@ public class CarController {
         }
     }
 
-    public ArrayList<Vehicle> getCars() {
-        return cars;
-    }
-
-
-
     public static void main(String[] args) {
-    new CarController();    
+        new CarController();
     }
 }

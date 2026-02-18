@@ -1,8 +1,8 @@
 package Main;
+
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.util.List;
 
 public class CarView extends JFrame {
 
@@ -10,8 +10,7 @@ public class CarView extends JFrame {
     private static final int Y = 800;
 
     CarController carC;
-
-    DrawPanel drawPanel = new DrawPanel(X, Y - 240);
+    public DrawPanel drawPanel;
 
     JPanel controlPanel = new JPanel();
     JPanel gasPanel = new JPanel();
@@ -21,16 +20,20 @@ public class CarView extends JFrame {
 
     JButton gasButton = new JButton("Gas");
     JButton brakeButton = new JButton("Brake");
+    JButton leftButton = new JButton("Turn Left");
+    JButton rightButton = new JButton("Turn Right");
     JButton turboOnButton = new JButton("Saab Turbo on");
     JButton turboOffButton = new JButton("Saab Turbo off");
     JButton liftBedButton = new JButton("Scania Lift Bed");
     JButton lowerBedButton = new JButton("Lower Lift Bed");
-
     JButton startButton = new JButton("Start all cars");
     JButton stopButton = new JButton("Stop all cars");
 
-    public CarView(String framename, CarController cc) {
+    public CarView(String framename, CarController cc, List<Vehicle> cars) {
         this.carC = cc;
+
+        drawPanel = new DrawPanel(X, Y - 240, cars);
+
         initComponents(framename);
     }
 
@@ -55,27 +58,28 @@ public class CarView extends JFrame {
 
         this.add(gasPanel);
 
-        controlPanel.setLayout(new GridLayout(2, 4));
-        controlPanel.add(gasButton);
-        controlPanel.add(turboOnButton);
-        controlPanel.add(liftBedButton);
-        controlPanel.add(brakeButton);
-        controlPanel.add(turboOffButton);
-        controlPanel.add(lowerBedButton);
-
-        controlPanel.setPreferredSize(new Dimension((X / 2) + 4, 200));
+        controlPanel.setLayout(new GridLayout(3, 4));
         controlPanel.setBackground(Color.CYAN);
+
+        controlPanel.add(gasButton);
+        controlPanel.add(brakeButton);
+        controlPanel.add(leftButton);
+        controlPanel.add(rightButton);
+        controlPanel.add(turboOnButton);
+        controlPanel.add(turboOffButton);
+        controlPanel.add(liftBedButton);
+        controlPanel.add(lowerBedButton);
+        controlPanel.add(startButton);
+        controlPanel.add(stopButton);
 
         this.add(controlPanel);
 
-        this.add(startButton);
-        this.add(stopButton);
-
-        
         gasButton.addActionListener(e -> carC.gas(gasAmount));
         brakeButton.addActionListener(e -> carC.brake(gasAmount));
         startButton.addActionListener(e -> carC.startAll());
         stopButton.addActionListener(e -> carC.stopAll());
+        leftButton.addActionListener(e -> carC.turnLeft());
+        rightButton.addActionListener(e -> carC.turnRight());
         turboOnButton.addActionListener(e -> carC.turboOn());
         turboOffButton.addActionListener(e -> carC.turboOff());
         liftBedButton.addActionListener(e -> carC.liftBed());

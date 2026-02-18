@@ -1,59 +1,69 @@
-
 package Main;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.ArrayList;
-import javax.imageio.ImageIO;
+
 import javax.swing.*;
+import java.awt.*;
+import java.util.List;
 
 public class DrawPanel extends JPanel {
 
-    ArrayList<BufferedImage> images = new ArrayList<>();
-    ArrayList<Point> points = new ArrayList<>();
+    private List<Vehicle> cars;
 
-    BufferedImage volvoWorkshopImage;
-    Point workshopPoint = new Point(300, 300);
+    private Image volvoImage;
+    private Image saabImage;
+    private Image scaniaImage;
+    private Image workshopImage;
 
-    public DrawPanel(int x, int y) {
-
+    public DrawPanel(int x, int y, List<Vehicle> cars) {
+        this.cars = cars;
         this.setDoubleBuffered(true);
         this.setPreferredSize(new Dimension(x, y));
-        this.setBackground(Color.green);
 
         try {
-            images.add(ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Volvo240.jpg")));
-            images.add(ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Saab95.jpg")));
-            images.add(ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Scania.jpg")));
-
-            points.add(new Point(0, 0));
-            points.add(new Point(0, 100));
-            points.add(new Point(0, 200));
-
-            volvoWorkshopImage =
-                    ImageIO.read(DrawPanel.class.getResourceAsStream("pics/VolvoBrand.jpg"));
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
+            volvoImage = new ImageIcon(getClass().getResource("/Main/pics/Volvo240.jpg")).getImage();
+            saabImage = new ImageIcon(getClass().getResource("/Main/pics/Saab95.jpg")).getImage();
+            scaniaImage = new ImageIcon(getClass().getResource("/Main/pics/Scania.jpg")).getImage();
+            workshopImage = new ImageIcon(getClass().getResource("/Main/pics/Workshop.png")).getImage();
+        } catch (Exception e) {
+            System.out.println("Bilder kunde inte laddas!");
+            e.printStackTrace();
         }
-    }
-
-    void moveit(int index, int x, int y) {
-        points.get(index).x = x;
-        points.get(index).y = y;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        for (int i = 0; i < images.size(); i++) {
-            g.drawImage(images.get(i), points.get(i).x, points.get(i).y, null);
+        // Rita workshop i mitten
+        int workshopWidth = 200;
+        int workshopHeight = 200;
+
+        int wx = (getWidth() - workshopWidth) / 2;
+        int wy = (getHeight() - workshopHeight) / 2;
+
+        if (workshopImage != null) {
+            g.drawImage(workshopImage, wx, wy, workshopWidth, workshopHeight, null);
         }
 
-        g.drawImage(volvoWorkshopImage,
-                workshopPoint.x,
-                workshopPoint.y,
-                null);
+        // Rita bilar
+        for (Vehicle car : cars) {
+
+            Image img = null;
+
+            if (car instanceof Volvo240)
+                img = volvoImage;
+            else if (car instanceof Saab95)
+                img = saabImage;
+            else if (car instanceof Scania)
+                img = scaniaImage;
+
+            if (img != null) {
+                g.drawImage(img,
+                        (int) car.getX(),
+                        (int) car.getY(),
+                        100,
+                        60,
+                        null);
+            }
+        }
     }
 }

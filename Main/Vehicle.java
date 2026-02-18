@@ -74,8 +74,8 @@ public abstract class Vehicle implements Movable {
         switch (direction) {
             case NORTH -> yPosition += currentSpeed;
             case SOUTH -> yPosition -= currentSpeed;
-            case EAST  -> xPosition += currentSpeed;
-            case WEST  -> xPosition -= currentSpeed;
+            case EAST  -> xPosition -= currentSpeed;
+            case WEST  -> xPosition += currentSpeed;
         }
     }
 
