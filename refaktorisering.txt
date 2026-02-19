@@ -1,0 +1,32 @@
+Programmering
+
+
+
+- [ ] Samla tillstånd, t.ex skapa en carsamling som vi lägger car från carcontroller till carsamling. Detta är för att car controller får för mycket ansvar.
+
+
+
+- [ ] Fixa duplicerad workshop logik, just nu används VolvoWorkshop när den endast behöver ta ifrån vår Workshop klass.
+- [ ] Introducera en ”vehicle renderer”, som istället ska sköta visualiseringen av bilarna istället för att klumpa ihop det som ”instanceof” av alla fordon
+- [ ] Mycket logik finns i CarController, vilket behöver ändras, till exempel behöver Workshop zonen vara i Workshop.java och inte i CarController (Här skulle en bra lösning kunna vara att skapa en typ av workshopzone klass, eller en lösning som påminner om Haulers funktion att lasta på bilar, bra med detta är att ”hitboxen” blir rund istället för en rektangel men då går den inte att ändras på bredden och höjden på samma sätt). Samt väggstuds behöver fixas utanför CarController, huvudpoängen är att separera logiken från kontrollerna som ska kopplas till vår metod.
+- [ ] Inkapsling av xPosition och yPosition bryts i CarController, kanske skapa en loop för att bestämma var bilarna bör hamna istället för att sätta det manuellt. Kanske skapa en metod kallad setPosition?
+- [ ] Sammanfattningsvis för CarController så har den för mycket logik, för mycket instanceof när den endast bör fokusera på knappar och kontroller.
+
+
+TODO:
+
+Varför instanceof i CarController är ett problem:
+CarController måste veta exakt vilka bilklasser som finns (Volvo, Saab, Scania).
+Varje gång en ny biltyp eller ny specialregel läggs till måste den ändras.
+Det gör att CarController växer och får för många ansvar (både spelregler och typ-specifik logik).
+
+Pga detta måste vi då skapa en ny klass, kallad någonting i stil med WorkshopZone där vi låter logiken vara, i CarController bör det endast hanteras knapptrycken, köra ticks med våran timer, och sedan be vyn att rita om. En annan fix som bör implementeras är att vi måste lägga till en setPosition funktion som vi kan använda oss av istället för att överskriva våran x och y koordinat.
+
+
+Ta bort VolvoWorkshop helt och istället ha en Workshop abstract klass och subklasser för Volvo workshopen
+
+DRAWPANEL  Samma där, fixa instanceof kedjan som skapas.
+
+CARCOLLECTION/CARSIMULATION
+
+Som det står högst upp skapa en klass som flyttar bilar, gör väggstuds och frågar workshopzonen om en bil ska tas bort så att carcontroller blir ännu mer simplare.
