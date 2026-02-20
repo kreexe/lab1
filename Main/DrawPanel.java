@@ -31,16 +31,18 @@ public class DrawPanel extends JPanel {
     }
 
     @Override
+    // paintComponent finns redan i Swing, därför skivs den över,
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         // Storlek och plats på workshop
         int workshopWidth = 175;
         int workshopHeight = 175;
-
+        //wx, wy är x och y koordinaterna för workshop
         int wx = (getWidth() - workshopWidth) / 2;
         int wy = (getHeight() - workshopHeight) / 2;
 
+        // Rita workshop
         g.drawImage(workshopImage, wx, wy, workshopWidth, workshopHeight, null);
 
         // rita bilarna
@@ -48,6 +50,7 @@ public class DrawPanel extends JPanel {
 
             Image img = null;
 
+            // Väljer bild baserat på biltyp, vi ska byta ut så det inte är i drawPanel
             if (car instanceof Volvo240)
                 img = volvoImage;
             else if (car instanceof Saab95)

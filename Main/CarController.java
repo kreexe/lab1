@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CarController {
 
-    private final int delay = 50;
+    private final int delay = 5;
     private Timer timer = new Timer(delay, new TimerListener());
 
     private CarView frame;
@@ -51,14 +51,14 @@ public class CarController {
             int carHeight = 60;
 
             for (int i = 0; i < cars.size(); i++) {
-
+                //Hämtar bilen, flyttar den (move) sen hämtar positionen igen.
                 Vehicle car = cars.get(i);
                 car.move();
 
                 int x = (int) car.getX();
                 int y = (int) car.getY();
 
-                //  Väggstuds
+                //  Kollar om bilen är inom gränsvärderna (inom panelen) annars gör vänster vänster = 180
                 if (x < 0 || x > panelWidth - carWidth) {
                     car.turnLeft();
                     car.turnLeft();
@@ -69,12 +69,13 @@ public class CarController {
                     car.turnLeft();
                 }
 
-                // Workshop-zon i mitten
+                // Storlek och position av workshop
                 int workshopWidth = 200;
                 int workshopHeight = 200;
                 int wx = (panelWidth - workshopWidth) / 2;
                 int wy = (panelHeight - workshopHeight) / 2;
 
+                // om x koordinaten på volvo är mindre och större än workshop koordinaterna (samma)
                 if (car instanceof Volvo240) {
                     if (x > wx && x < wx + workshopWidth &&
                         y > wy && y < wy + workshopHeight) {
@@ -91,7 +92,8 @@ public class CarController {
         }
     }
 
-
+    //borde inte ligga här.
+    
     void gas(int amount) {
         double gas = amount / 100.0;
         for (Vehicle car : cars) {

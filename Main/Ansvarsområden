@@ -1,0 +1,36 @@
+
+
+Systemet följer MVC, vilket betyder att modell, vy och controller är separerade. Det visar att Separation of Concerns (SoC) i stort sett följs.
+
+
+Vehicle, Car, Truck, Saab95, Volvo240, Scania
+Ansvarar för bilarnas egenskaper och rörelse (hastighet, riktning, motor osv).
+De behöver ändras om hur bilar fungerar ändras.
+De följer SRP eftersom de bara hanterar fordonslogik.
+
+
+Workshop, GeneralWorkshop, VolvoWorkshop, SaabWorkshop
+Ansvarar för att lagra och hantera bilar.
+De behöver ändras om regler för hur bilar lagras ändras (t.ex. kapacitet eller typ av bil).
+De följer SRP eftersom de bara hanterar förvaring av fordon.
+
+
+CarController
+Ansvarar för att styra bilarna genom att ta emot input från vyn och anropa metoder på modellen.
+Den behöver ändras om nya styrfunktioner läggs till.
+Den riskerar att bryta SRP om för mycket logik läggs direkt i controllern.
+
+
+CarView
+Ansvarar för att skapa fönstret och knapparna.
+Den behöver ändras om layout eller design ändras.
+
+
+DrawPanel
+Ansvarar för att rita bilarna på skärmen.
+Den behöver ändras om hur bilar visas ändras.
+
+
+Dekomposition
+Den klass som mest kan behöva delas upp är CarController om den får för mycket ansvar.
+I övrigt är ansvaret ganska tydligt uppdelat och SoC följs bra.
