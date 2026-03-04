@@ -1,63 +1,53 @@
 package Main;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Workshop<T extends Car> {
-    
-    private final int maxCapacity;
+// Abstrakt basklass
+public abstract class Workshop<T extends Car> {
+
     private List<T> cars;
 
-    public Workshop(int maxCapacity) {
-        this.maxCapacity = maxCapacity;
-        this.cars = new ArrayList<>();
+    public Workshop() {
+        cars = new ArrayList<>();
     }
 
     public boolean addCar(T car) {
-        if (cars.size() >= maxCapacity) {
-            return false;
+        if (!cars.contains(car)) {
+            cars.add(car);
+            return true;
         }
-        cars.add(car);
-        return true;
+        return false;
     }
 
-    public T removeCar() {
-        if (cars.isEmpty()) {
-            return null;
-        }
-        return cars.remove(cars.size() - 1);
+    public boolean removeCar(T car) {
+        return cars.remove(car);
     }
 
-    public int getCurrentCount() {
-        return cars.size();
+    public List<T> getCars() {
+        return cars;
     }
 
-    public int getMaxCapacity() {
-        return maxCapacity;
+    public void loadCar(T car) {
+        addCar(car);
+        brandSpecificAction(car);
     }
 
-    public boolean isFull() {
-        return cars.size() >= maxCapacity;
-    }
+    // Abstrakt metod som subklasser måste implementera
+    protected abstract void brandSpecificAction(T car);
 
-    public boolean isEmpty() {
-        return cars.isEmpty();
-    }
-
-    public static class GeneralWorkshop extends Workshop<Car> {
-        public GeneralWorkshop(int maxCapacity) {
-            super(maxCapacity);
-        }
-    }
-
+    // ==== Brand-specifika workshops ====
     public static class VolvoWorkshop extends Workshop<Volvo240> {
-        public VolvoWorkshop(int maxCapacity) {
-            super(maxCapacity);
+        @Override
+        protected void brandSpecificAction(Volvo240 car) {
+            System.out.println("Loaded Volvo: " + car);
         }
     }
 
     public static class SaabWorkshop extends Workshop<Saab95> {
-        public SaabWorkshop(int maxCapacity) {
-            super(maxCapacity);
+        @Override
+        protected void brandSpecificAction(Saab95 car) {
+            System.out.println("Loaded Saab: " + car);
         }
     }
 }

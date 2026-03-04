@@ -1,9 +1,7 @@
 package Main;
 
-
 public abstract class Truck extends Vehicle {
 
-    // flak för ALLA truck-modeller, som ska implemetneras i uppg 2 också
     protected double bedAngle = 0.0;
     protected static final double MAX_BED_ANGLE = 70.0;
 
@@ -11,36 +9,45 @@ public abstract class Truck extends Vehicle {
         super();
     }
 
-    // läser av det första värdet som anges i modellen (scania)
     public double getBedAngle() {
         return bedAngle;
     }
 
-    // gör så att flaket kan höjas bara när den står
+    // Höj flak – bara när bilen står helt stilla
     public void raiseBed(double degrees) {
-        if (getCurrentSpeed() != 0) return;
-        bedAngle = Math.min(MAX_BED_ANGLE, bedAngle + degrees);
+        if (getCurrentSpeed() == 0) {
+            bedAngle = Math.min(MAX_BED_ANGLE, bedAngle + degrees);
+        }
     }
 
-    // gör så att flaket kan sänkas när lastbilen står stilla
+    // Sänk flak – bara när bilen står helt stilla
     public void lowerBed(double degrees) {
-        if (getCurrentSpeed() != 0) return;
-        bedAngle = Math.max(0.0, bedAngle - degrees);
+        if (getCurrentSpeed() == 0) {
+            bedAngle = Math.max(0.0, bedAngle - degrees);
+        }
     }
 
-    // förhindrar acceleration eller att man startar motorn om inte flaket är helt nerfält, eller också att den ens kan röra på sig
+    // Starta bara om flaket är nere
     @Override
     public void startEngine() {
-        if (bedAngle == 0.0) super.startEngine();
+        if (bedAngle == 0.0) {
+            super.startEngine();
+        }
     }
 
+    // Gasa bara om flaket är nere
     @Override
     public void gas(double amount) {
-        if (bedAngle == 0.0) super.gas(amount);
+        if (bedAngle == 0.0) {
+            super.gas(amount);
+        }
     }
 
+    // Rör sig bara om flaket är nere
     @Override
     public void move() {
-        if (bedAngle == 0.0) super.move();
+        if (bedAngle == 0.0) {
+            super.move();
+        }
     }
 }

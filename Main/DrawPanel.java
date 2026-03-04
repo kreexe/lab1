@@ -24,10 +24,10 @@ public class DrawPanel extends JPanel {
         
         // Samma sökväg som bilerna i filerna
 
-        volvoImage = new ImageIcon("lab1/Main/pics/Volvo240.jpg").getImage();
-        saabImage = new ImageIcon("lab1/Main/pics/Saab95.jpg").getImage();
-        scaniaImage = new ImageIcon("lab1/Main/pics/Scania.jpg").getImage();
-        workshopImage = new ImageIcon("lab1/Main/pics/VolvoBrand.jpg").getImage();
+            volvoImage = new ImageIcon(getClass().getResource("pics/Volvo240.jpg")).getImage();
+            saabImage = new ImageIcon(getClass().getResource("pics/Saab95.jpg")).getImage();
+            scaniaImage = new ImageIcon(getClass().getResource("pics/Scania.jpg")).getImage();
+            workshopImage = new ImageIcon(getClass().getResource("pics/VolvoBrand.jpg")).getImage();
     }
 
     @Override

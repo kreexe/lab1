@@ -3,8 +3,6 @@ package Main;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CarController {
 
@@ -12,160 +10,68 @@ public class CarController {
     private Timer timer = new Timer(delay, new TimerListener());
 
     private CarView frame;
-    private List<Vehicle> cars = new ArrayList<>();
-
-    private VolvoWorkshop workshop = new VolvoWorkshop(5);
+    private CarSimModel model;
 
     public CarController() {
 
-        Volvo240 volvo = new Volvo240();
-        Saab95 saab = new Saab95();
-        Scania scania = new Scania();
+        model = new CarSimModel();
 
-        // 100px mellanrum 
-        volvo.xPosition = 0;
-        volvo.yPosition = 0;
-
-        saab.xPosition = 0;
-        saab.yPosition = 100;
-
-        scania.xPosition = 0;
-        scania.yPosition = 200;
-
-        cars.add(volvo);
-        cars.add(saab);
-        cars.add(scania);
-
-        frame = new CarView("CarSim 1.0", this, cars);
+        frame = new CarView("CarSim 1.0", this, model.getCars());
 
         timer.start();
     }
 
     private class TimerListener implements ActionListener {
+
         public void actionPerformed(ActionEvent e) {
 
             int panelWidth = frame.drawPanel.getWidth();
             int panelHeight = frame.drawPanel.getHeight();
 
-            int carWidth = 100;
-            int carHeight = 60;
-
-            for (int i = 0; i < cars.size(); i++) {
-                //Hämtar bilen, flyttar den (move) sen hämtar positionen igen.
-                Vehicle car = cars.get(i);
-                car.move();
-
-                int x = (int) car.getX();
-                int y = (int) car.getY();
-
-                //  Kollar om bilen är inom gränsvärderna (inom panelen) annars gör vänster vänster = 180
-                if (x < 0 || x > panelWidth - carWidth) {
-                    car.turnLeft();
-                    car.turnLeft();
-                }
-
-                if (y < 0 || y > panelHeight - carHeight) {
-                    car.turnLeft();
-                    car.turnLeft();
-                }
-
-                // Storlek och position av workshop
-                int workshopWidth = 200;
-                int workshopHeight = 200;
-                int wx = (panelWidth - workshopWidth) / 2;
-                int wy = (panelHeight - workshopHeight) / 2;
-
-                // om x koordinaten på volvo är mindre och större än workshop koordinaterna (samma)
-                if (car instanceof Volvo240) {
-                    if (x > wx && x < wx + workshopWidth &&
-                        y > wy && y < wy + workshopHeight) {
-
-                        workshop.loadCar((Volvo240) car);
-                        cars.remove(i);
-                        i--;
-                        continue;
-                }
-                }
-            }
+            model.update(panelWidth, panelHeight);
 
             frame.repaint();
         }
     }
 
-    //borde inte ligga här.
-    
     void gas(int amount) {
-        double gas = amount / 100.0;
-        for (Vehicle car : cars) {
-            car.gas(gas);
-        }
+        model.gas(amount);
     }
 
     void brake(int amount) {
-        double brake = amount / 100.0;
-        for (Vehicle car : cars) {
-            car.brake(brake);
-        }
+        model.brake(amount);
     }
 
     void startAll() {
-        for (Vehicle car : cars) {
-            car.startEngine();
-        }
+        model.startAll();
     }
 
     void stopAll() {
-        for (Vehicle car : cars) {
-            car.stopEngine();
-        }
+        model.stopAll();
     }
 
     void turnLeft() {
-        for (Vehicle car : cars) {
-            car.turnLeft();
-        }
+        model.turnLeft();
     }
 
     void turnRight() {
-        for (Vehicle car : cars) {
-            car.turnRight();
-        }
+        model.turnRight();
     }
 
-    //  SAAB TURBO 
-
     void turboOn() {
-        for (Vehicle car : cars) {
-            if (car instanceof Saab95) {
-                ((Saab95) car).setTurboOn();
-            }
-        }
+        model.turboOn();
     }
 
     void turboOff() {
-        for (Vehicle car : cars) {
-            if (car instanceof Saab95) {
-                ((Saab95) car).setTurboOff();
-            }
-        }
+        model.turboOff();
     }
 
-    //  SCANIA FLAK 
-
     void liftBed() {
-        for (Vehicle car : cars) {
-            if (car instanceof Scania) {
-                ((Scania) car).raiseBed(10);
-            }
-        }
+        model.liftBed();
     }
 
     void lowerBed() {
-        for (Vehicle car : cars) {
-            if (car instanceof Scania) {
-                ((Scania) car).lowerBed(10);
-            }
-        }
+        model.lowerBed();
     }
 
     public static void main(String[] args) {
