@@ -5,27 +5,28 @@ import java.util.List;
 
 public class CarSimModel {
 
-    private List<Vehicle> cars = new ArrayList<>();
-    private Workshop<Volvo240> workshop = new Workshop.VolvoWorkshop();
+    private final List<Vehicle> cars = new ArrayList<>();
+    private static final int Y_SPACING = 100; // avstånd mellan bilarna som spawnas in
+    private WorkshopZone<Volvo240> workshopZone;
+    private static final int CAR_WIDTH = 100;
+    private static final int CAR_HEIGHT = 60;
 
     public CarSimModel() {
+        workshopZone = new WorkshopZone<Volvo240>(200, 200, new Workshop.VolvoWorkshop());
+        initializeCars();
+    }
 
-        Volvo240 volvo = new Volvo240();
-        Saab95 saab = new Saab95();
-        Scania scania = new Scania();
+    private void initializeCars() {
+        addCar(new Volvo240());
+        addCar(new Saab95());
+        addCar(new Scania());
+    }
 
-        volvo.xPosition = 0;
-        volvo.yPosition = 0;
-
-        saab.xPosition = 0;
-        saab.yPosition = 100;
-
-        scania.xPosition = 0;
-        scania.yPosition = 200;
-
-        cars.add(volvo);
-        cars.add(saab);
-        cars.add(scania);
+    public void addCar(Vehicle car) {
+        double x = 0;
+        double y = cars.size() * Y_SPACING; // automatisk y-position baserat på antal bilar
+        car.setPosition(x, y);
+        cars.add(car);
     }
 
     public List<Vehicle> getCars() {
@@ -33,43 +34,46 @@ public class CarSimModel {
     }
 
     public void update(int panelWidth, int panelHeight) {
-
-        int carWidth = 100;
-        int carHeight = 60;
-
         for (int i = 0; i < cars.size(); i++) {
-
             Vehicle car = cars.get(i);
+
             car.move();
 
-            int x = (int) car.getX();
-            int y = (int) car.getY();
+            // vänd bilen vid kollision
+            bounceOnCollision(car, panelWidth, panelHeight);
 
-            if (x < 0 || x > panelWidth - carWidth) {
-                car.turnLeft();
-                car.turnLeft();
+            if (workshopZone != null && car instanceof Volvo240 && workshopZone.tryAddCar((Volvo240) car, panelWidth, panelHeight)) {
+                cars.remove(i);
+                i--;
             }
+        }
+    }
 
-            if (y < 0 || y > panelHeight - carHeight) {
-                car.turnLeft();
-                car.turnLeft();
-            }
+    private void bounceOnCollision(Vehicle car, int panelWidth, int panelHeight) {
+        int x = (int) Math.round(car.getX());
+        int y = (int) Math.round(car.getY());
+        boolean collided = false;
 
-            int workshopWidth = 200;
-            int workshopHeight = 200;
+        if (x < 0) {
+            car.setPosition(0, car.getY());
+            collided = true;
+        } else if (x > panelWidth - CAR_WIDTH) {
+            car.setPosition(panelWidth - CAR_WIDTH, car.getY());
+            collided = true;
+        }
 
-            int wx = (panelWidth - workshopWidth) / 2;
-            int wy = (panelHeight - workshopHeight) / 2;
+        if (y < 0) {
+            car.setPosition(car.getX(), 0);
+            collided = true;
+        } else if (y > panelHeight - CAR_HEIGHT) {
+            car.setPosition(car.getX(), panelHeight - CAR_HEIGHT);
+            collided = true;
+        }
 
-            if (car instanceof Volvo240) {
-                if (x > wx && x < wx + workshopWidth &&
-                        y > wy && y < wy + workshopHeight) {
-
-                    workshop.loadCar((Volvo240) car);
-                    cars.remove(i);
-                    i--;
-                }
-            }
+        if (collided) {
+            // vänd 180°
+            car.turnLeft();
+            car.turnLeft();
         }
     }
 

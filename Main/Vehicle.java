@@ -99,6 +99,11 @@ public abstract class Vehicle implements Movable {
         }
     }
 
+    public void setPosition(double x, double y) {
+        this.xPosition = x;
+        this.yPosition = y;
+    }
+
     // getters för testerna
     public double getX() { return xPosition; }
     public double getY() { return yPosition; }

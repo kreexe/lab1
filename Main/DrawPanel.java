@@ -6,22 +6,22 @@ import java.util.List;
 
 public class DrawPanel extends JPanel {
 
-    private List<Vehicle> cars;
+    private CarSimModel model;
 
     private Image volvoImage;
     private Image saabImage;
     private Image scaniaImage;
     private Image workshopImage;
 
-    public DrawPanel(int x, int y, List<Vehicle> cars) {
+    public DrawPanel(int x, int y, CarSimModel model) {
 
-        this.cars = cars;
+        this.model = model;
 
         this.setDoubleBuffered(true);
         this.setPreferredSize(new Dimension(x, y));
         this.setBackground(Color.WHITE);
 
-        
+
         // Samma sökväg som bilerna i filerna
 
             volvoImage = new ImageIcon(getClass().getResource("pics/Volvo240.jpg")).getImage();
@@ -46,7 +46,7 @@ public class DrawPanel extends JPanel {
         g.drawImage(workshopImage, wx, wy, workshopWidth, workshopHeight, null);
 
         // rita bilarna
-        for (Vehicle car : cars) {
+        for (Vehicle car : model.getCars()) {
 
             Image img = null;
 

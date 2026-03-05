@@ -13,18 +13,13 @@ public class CarController {
     private CarSimModel model;
 
     public CarController() {
-
         model = new CarSimModel();
-
-        frame = new CarView("CarSim 1.0", this, model.getCars());
-
+        frame = new CarView("Car Game", this, model);
         timer.start();
     }
 
     private class TimerListener implements ActionListener {
-
         public void actionPerformed(ActionEvent e) {
-
             int panelWidth = frame.drawPanel.getWidth();
             int panelHeight = frame.drawPanel.getHeight();
 

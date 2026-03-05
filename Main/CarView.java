@@ -34,10 +34,10 @@ public class CarView extends JFrame {
 
 
     //skapar controllern och drawpanel
-    public CarView(String framename, CarController cc, List<Vehicle> cars) {
+    public CarView(String framename, CarController cc, CarSimModel model) {
         this.carC = cc;
 
-        drawPanel = new DrawPanel(X, Y - 240, cars);
+        drawPanel = new DrawPanel(X, Y - 240, model);
 
         initComponents(framename);
     }

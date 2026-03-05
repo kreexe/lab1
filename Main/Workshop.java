@@ -3,7 +3,7 @@ package Main;
 import java.util.ArrayList;
 import java.util.List;
 
-// Abstrakt basklass
+
 public abstract class Workshop<T extends Car> {
 
     private List<T> cars;
@@ -33,10 +33,10 @@ public abstract class Workshop<T extends Car> {
         brandSpecificAction(car);
     }
 
-    // Abstrakt metod som subklasser måste implementera
+    // abstrakt metod som behövs implementeras för varje bilmärke
     protected abstract void brandSpecificAction(T car);
 
-    // ==== Brand-specifika workshops ====
+    // volvo och saab workshop
     public static class VolvoWorkshop extends Workshop<Volvo240> {
         @Override
         protected void brandSpecificAction(Volvo240 car) {
