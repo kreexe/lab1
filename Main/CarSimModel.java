@@ -8,6 +8,7 @@ public class CarSimModel {
     private final List<Vehicle> cars = new ArrayList<>();
     private static final int Y_SPACING = 100; // avstånd mellan bilarna som spawnas in
     private WorkshopZone<Volvo240> workshopZone;
+    private List<Observer> observers = new ArrayList<>();
     private static final int CAR_WIDTH = 100;
     private static final int CAR_HEIGHT = 60;
 
@@ -20,6 +21,7 @@ public class CarSimModel {
         addCar(new Volvo240());
         addCar(new Saab95());
         addCar(new Scania());
+    
     }
 
     public void addCar(Vehicle car) {
@@ -33,6 +35,23 @@ public class CarSimModel {
         return cars;
     }
 
+    // Observer
+
+    public void addObserver(Observer o) {
+        observers.add(o);
+    }
+
+    public void removeObserver(Observer o) {
+        observers.remove(o);
+    }
+
+    private void notifyObservers() {
+        for (Observer o : observers) {
+            o.update();
+        }
+    }
+
+
     public void update(int panelWidth, int panelHeight) {
         for (int i = 0; i < cars.size(); i++) {
             Vehicle car = cars.get(i);
@@ -42,11 +61,14 @@ public class CarSimModel {
             // vänd bilen vid kollision
             bounceOnCollision(car, panelWidth, panelHeight);
 
-            if (workshopZone != null && car instanceof Volvo240 && workshopZone.tryAddCar((Volvo240) car, panelWidth, panelHeight)) {
+            if (workshopZone != null && car instanceof Volvo240 &&
+                    workshopZone.tryAddCar((Volvo240) car, panelWidth, panelHeight)) {
                 cars.remove(i);
                 i--;
             }
         }
+
+        notifyObservers();
     }
 
     private void bounceOnCollision(Vehicle car, int panelWidth, int panelHeight) {
@@ -76,6 +98,7 @@ public class CarSimModel {
             car.turnLeft();
         }
     }
+
 
     public void gas(int amount) {
         double gas = amount / 100.0;
