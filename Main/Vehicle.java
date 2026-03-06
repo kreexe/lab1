@@ -8,7 +8,7 @@ public abstract class Vehicle implements Movable {
     protected Color color;
     protected String modelName;
 
-    // Position via Location 
+    // Position via Location
     protected Location location = new Location(0,0);
 
     protected enum Direction { NORTH, EAST, SOUTH, WEST }
@@ -56,7 +56,6 @@ public abstract class Vehicle implements Movable {
         currentSpeed = Math.max(currentSpeed - speedFactor() * amount, 0);
     }
 
-   
     public void gas(double amount) {
         if (amount < 0 || amount > 1) return;
         incrementSpeed(amount);
@@ -102,8 +101,12 @@ public abstract class Vehicle implements Movable {
         location.setPosition(x, y);
     }
 
-    // getters för testerna
+    // getters
     public double getX() { return location.getX(); }
     public double getY() { return location.getY(); }
     public Direction getDirection() { return direction; }
+
+    public String getModelName() {
+        return modelName;
+    }
 }

@@ -52,11 +52,11 @@ public class DrawPanel extends JPanel {
             Image img = null;
 
             // Väljer bild baserat på biltyp, vi ska byta ut så det inte är i drawPanel
-            if (car instanceof Volvo240)
+            if (car.getModelName().equals("Volvo240"))
                 img = volvoImage;
-            else if (car instanceof Saab95)
+            else if (car.getModelName().equals("Saab95"))
                 img = saabImage;
-            else if (car instanceof Scania)
+            else if (car.getModelName().equals("Scania"))
                 img = scaniaImage;
 
             if (img != null) {
