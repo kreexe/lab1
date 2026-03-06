@@ -9,7 +9,7 @@ public class CarController {
     private CarSimModel model;
     private CarView frame;
 
-    int delay = 50;
+    int delay = 5;
 
     public CarController() {
 
