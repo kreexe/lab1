@@ -39,7 +39,7 @@ public class CarView extends JFrame {
         this.carC = cc;
         this.model = model;
         drawPanel = new DrawPanel(X, Y - 240, model);
-        model.addObserver(drawPanel); // <-- lägg till denna rad
+        model.addObserver(drawPanel);
 
         this.setTitle(framename);
         this.setLayout(new BorderLayout());
@@ -95,4 +95,5 @@ public class CarView extends JFrame {
     public DrawPanel getDrawPanel() {
         return drawPanel;
     }
+
 }
