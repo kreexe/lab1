@@ -8,9 +8,8 @@ public abstract class Vehicle implements Movable {
     protected Color color;
     protected String modelName;
 
-    // Position & riktning (krävs av tester) - ändrade till protected då vi behöver det för uppg 2
-    protected double xPosition = 0;
-    protected double yPosition = 0;
+    // Position via Location 
+    protected Location location = new Location(0,0);
 
     protected enum Direction { NORTH, EAST, SOUTH, WEST }
     protected Direction direction = Direction.NORTH;
@@ -57,7 +56,7 @@ public abstract class Vehicle implements Movable {
         currentSpeed = Math.max(currentSpeed - speedFactor() * amount, 0);
     }
 
-    // Sanity checks 
+   
     public void gas(double amount) {
         if (amount < 0 || amount > 1) return;
         incrementSpeed(amount);
@@ -72,10 +71,10 @@ public abstract class Vehicle implements Movable {
     @Override
     public void move() {
         switch (direction) {
-            case NORTH -> yPosition += currentSpeed;
-            case SOUTH -> yPosition -= currentSpeed;
-            case EAST  -> xPosition -= currentSpeed;
-            case WEST  -> xPosition += currentSpeed;
+            case NORTH -> location.setY(location.getY() + currentSpeed);
+            case SOUTH -> location.setY(location.getY() - currentSpeed);
+            case EAST  -> location.setX(location.getX() - currentSpeed);
+            case WEST  -> location.setX(location.getX() + currentSpeed);
         }
     }
 
@@ -100,12 +99,11 @@ public abstract class Vehicle implements Movable {
     }
 
     public void setPosition(double x, double y) {
-        this.xPosition = x;
-        this.yPosition = y;
+        location.setPosition(x, y);
     }
 
     // getters för testerna
-    public double getX() { return xPosition; }
-    public double getY() { return yPosition; }
+    public double getX() { return location.getX(); }
+    public double getY() { return location.getY(); }
     public Direction getDirection() { return direction; }
 }

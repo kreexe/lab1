@@ -41,6 +41,7 @@ public class DrawPanel extends JPanel {
         //wx, wy är x och y koordinaterna för workshop
         int wx = (getWidth() - workshopWidth) / 2;
         int wy = (getHeight() - workshopHeight) / 2;
+        //! här kan man skirva getwokshopwith enligt TA
 
         // Rita workshop
         g.drawImage(workshopImage, wx, wy, workshopWidth, workshopHeight, null);

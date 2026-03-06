@@ -31,8 +31,7 @@ public abstract class Hauler extends Truck {
         if (loadedCars.isEmpty()) return null;
 
         Car car = loadedCars.pop();
-        car.xPosition = this.getX() + 2.0;
-        car.yPosition = this.getY();
+        car.setPosition(this.getX() + 2.0, this.getY());
         return car;
     }
 
@@ -53,8 +52,10 @@ public abstract class Hauler extends Truck {
         double deltaY = newY - oldY;
         
         for (Car car : loadedCars) {
-            car.xPosition += deltaX;
-            car.yPosition += deltaY;
+            car.setPosition(
+                car.getX() + deltaX,
+                car.getY() + deltaY
+            );
         }
     }
 }
