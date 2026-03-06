@@ -1,6 +1,7 @@
 package Main;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -9,7 +10,7 @@ public class CarSimModel {
     private final List<Vehicle> cars = new ArrayList<>();
     private static final int Y_SPACING = 100;
     private WorkshopZone<Volvo240> workshopZone;
-    private List<Observer> observers = new ArrayList<>();
+    private final List<Observer> observers = new ArrayList<>();
     private static final int CAR_WIDTH = 100;
     private static final int CAR_HEIGHT = 60;
     private final Random rand = new Random();
@@ -20,9 +21,9 @@ public class CarSimModel {
     }
 
     private void initializeCars() {
-        addCar(new Volvo240());
-        addCar(new Saab95());
-        addCar(new Scania());
+        addCar(VehicleFactory.create("volvo"));
+        addCar(VehicleFactory.create("saab"));
+        addCar(VehicleFactory.create("scania"));
     }
 
     public void addCar(Vehicle car) {
@@ -34,20 +35,7 @@ public class CarSimModel {
     }
 
     public void addCar() {
-        Vehicle car;
-        int r = rand.nextInt(3);
-        switch (r) {
-            case 0:
-                car = new Volvo240();
-                break;
-            case 1:
-                car = new Saab95();
-                break;
-            default:
-                car = new Scania();
-                break;
-        }
-        addCar(car);
+        addCar(VehicleFactory.createRandom());
     }
 
     public void removeCar() {
@@ -58,10 +46,8 @@ public class CarSimModel {
     }
 
     public List<Vehicle> getCars() {
-        return cars;
+        return Collections.unmodifiableList(cars);
     }
-
-    // Observer
 
     public void addObserver(Observer o) {
         observers.add(o);
@@ -72,29 +58,20 @@ public class CarSimModel {
     }
 
     private void notifyObservers() {
-        for (Observer o : observers) {
-            o.update();
-        }
+        for (Observer o : observers) o.update();
     }
-
 
     public void update(int panelWidth, int panelHeight) {
         for (int i = 0; i < cars.size(); i++) {
             Vehicle car = cars.get(i);
-
             car.move();
-
-            // vänd bilen vid kollision
             bounceOnCollision(car, panelWidth, panelHeight);
-
-        
             if (workshopZone != null && car instanceof Volvo240 &&
                     workshopZone.tryAddCar((Volvo240) car, panelWidth, panelHeight)) {
                 cars.remove(i);
                 i--;
             }
         }
-
         notifyObservers();
     }
 
@@ -120,82 +97,86 @@ public class CarSimModel {
         }
 
         if (collided) {
-            // vänd 180°
             car.turnLeft();
             car.turnLeft();
         }
     }
 
-
     public void gas(int amount) {
         double gas = amount / 100.0;
-
-        for (Vehicle car : cars) {
-            car.gas(gas);
-        }
+        for (Vehicle car : cars) car.gas(gas);
+        notifyObservers();
     }
 
     public void brake(int amount) {
         double brake = amount / 100.0;
-
-        for (Vehicle car : cars) {
-            car.brake(brake);
-        }
+        for (Vehicle car : cars) car.brake(brake);
+        notifyObservers();
     }
 
     public void startAll() {
-        for (Vehicle car : cars) {
-            car.startEngine();
-        }
+        for (Vehicle car : cars) car.startEngine();
+        notifyObservers();
     }
 
     public void stopAll() {
-        for (Vehicle car : cars) {
-            car.stopEngine();
-        }
+        for (Vehicle car : cars) car.stopEngine();
+        notifyObservers();
     }
 
     public void turnLeft() {
-        for (Vehicle car : cars) {
-            car.turnLeft();
-        }
+        for (Vehicle car : cars) car.turnLeft();
+        notifyObservers();
     }
 
     public void turnRight() {
-        for (Vehicle car : cars) {
-            car.turnRight();
-        }
+        for (Vehicle car : cars) car.turnRight();
+        notifyObservers();
     }
 
+
+    //byter ut instanceof mot modelname
     public void turboOn() {
         for (Vehicle car : cars) {
-            if (car instanceof Saab95) {
+            String name = car.getModelName();
+            if (name != null && name.equalsIgnoreCase("Saab95")) {
                 ((Saab95) car).setTurboOn();
             }
         }
+        notifyObservers();
     }
 
     public void turboOff() {
         for (Vehicle car : cars) {
-            if (car instanceof Saab95) {
+            String name = car.getModelName();
+            if (name != null && name.equalsIgnoreCase("Saab95")) {
                 ((Saab95) car).setTurboOff();
             }
         }
+        notifyObservers();
     }
 
     public void liftBed() {
         for (Vehicle car : cars) {
-            if (car instanceof Scania) {
+            String name = car.getModelName();
+            if (name != null && name.equalsIgnoreCase("Scania")) {
                 ((Scania) car).raiseBed(10);
             }
         }
+        notifyObservers();
     }
 
     public void lowerBed() {
         for (Vehicle car : cars) {
-            if (car instanceof Scania) {
+            String name = car.getModelName();
+            if (name != null && name.equalsIgnoreCase("Scania")) {
                 ((Scania) car).lowerBed(10);
             }
         }
+        notifyObservers();
+    }
+k
+    public WorkshopZone<?> getWorkshopZone() {
+        return workshopZone;
     }
 }

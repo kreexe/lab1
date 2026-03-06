@@ -6,77 +6,51 @@ import java.awt.event.ActionListener;
 
 public class CarController {
 
-    private CarSimModel model;
-    private CarView frame;
+    private static final int DELAY = 20;
+    private final CarSimModel model;
+    private CarView view;
+    private final Timer timer;
 
-    int delay = 5;
+    public CarController(CarSimModel model) {
+        this.model = model;
+        this.timer = new Timer(DELAY, new TimerListener());
+    }
 
-    public CarController() {
+    public void setView(CarView view) {
+        this.view = view;
+    }
 
-        model = new CarSimModel();
-        frame = new CarView("CarSim 1.0", this, model);
-
-        Timer timer = new Timer(delay, new TimerListener());
+    public void start() {
         timer.start();
     }
 
-    private class TimerListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
+    public void stop() {
+        timer.stop();
+    }
 
-            model.update(frame.getDrawPanel().getWidth(), frame.getDrawPanel().getHeight());
-            frame.repaint();
+    private class TimerListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (view == null) return;
+            int w = view.getDrawPanel().getWidth();
+            int h = view.getDrawPanel().getHeight();
+            model.update(w, h);
+            view.repaint();
         }
     }
 
-    public void gas(int amount) {
-        model.gas(amount);
-    }
-
-    public void brake(int amount) {
-        model.brake(amount);
-    }
-
-    public void startAllCars() {
-        model.startAll();
-    }
-
-    public void stopAllCars() {
-        model.stopAll();
-    }
-
-    public void turnLeft() {
-        model.turnLeft();
-    }
-
-    public void turnRight() {
-        model.turnRight();
-    }
-
-    public void turboOn() {
-        model.turboOn();
-    }
-
-    public void turboOff() {
-        model.turboOff();
-    }
-
-    public void liftBed() {
-        model.liftBed();
-    }
-
-    public void lowerBed() {
-        model.lowerBed();
-    }
-
-    public void addCar() {
-        model.addCar();
-    }
-
-    public void removeCar() {
-        model.removeCar();
-    }
-
-    public static void main(String[] args) {
-        new CarController();
-    }
+    // gjorde det lite mer kompakt
+    public void addCar()       { model.addCar(); }
+    public void addCar(Vehicle v){ model.addCar(v); }
+    public void removeCar()    { model.removeCar(); }
+    public void gas(int amt)   { model.gas(amt); }
+    public void brake(int amt) { model.brake(amt); }
+    public void startAllCars() { model.startAll(); }
+    public void stopAllCars() { model.stopAll(); }
+    public void turnLeft()     { model.turnLeft(); }
+    public void turnRight()    { model.turnRight(); }
+    public void turboOn()      { model.turboOn(); }
+    public void turboOff()     { model.turboOff(); }
+    public void liftBed()      { model.liftBed(); }
+    public void lowerBed()     { model.lowerBed(); }
 }

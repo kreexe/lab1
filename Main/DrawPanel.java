@@ -2,9 +2,8 @@ package Main;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
-public class DrawPanel extends JPanel {
+public class DrawPanel extends JPanel implements Observer {
 
     private CarSimModel model;
 
@@ -17,41 +16,33 @@ public class DrawPanel extends JPanel {
 
         this.model = model;
 
+        model.addObserver(this);
+
         this.setDoubleBuffered(true);
         this.setPreferredSize(new Dimension(x, y));
         this.setBackground(Color.WHITE);
 
-
-        // Samma sökväg som bilerna i filerna
-
-            volvoImage = new ImageIcon(getClass().getResource("pics/Volvo240.jpg")).getImage();
-            saabImage = new ImageIcon(getClass().getResource("pics/Saab95.jpg")).getImage();
-            scaniaImage = new ImageIcon(getClass().getResource("pics/Scania.jpg")).getImage();
-            workshopImage = new ImageIcon(getClass().getResource("pics/VolvoBrand.jpg")).getImage();
+        volvoImage = new ImageIcon(getClass().getResource("pics/Volvo240.jpg")).getImage();
+        saabImage = new ImageIcon(getClass().getResource("pics/Saab95.jpg")).getImage();
+        scaniaImage = new ImageIcon(getClass().getResource("pics/Scania.jpg")).getImage();
+        workshopImage = new ImageIcon(getClass().getResource("pics/VolvoBrand.jpg")).getImage();
     }
 
     @Override
-    // paintComponent finns redan i Swing, därför skivs den över,
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // Storlek och plats på workshop
         int workshopWidth = 175;
         int workshopHeight = 175;
-        //wx, wy är x och y koordinaterna för workshop
+
         int wx = (getWidth() - workshopWidth) / 2;
         int wy = (getHeight() - workshopHeight) / 2;
-        //! här kan man skirva getwokshopwith enligt TA
 
-        // Rita workshop
         g.drawImage(workshopImage, wx, wy, workshopWidth, workshopHeight, null);
 
-        // rita bilarna
         for (Vehicle car : model.getCars()) {
-
             Image img = null;
 
-            // Väljer bild baserat på biltyp, vi ska byta ut så det inte är i drawPanel
             if (car.getModelName().equals("Volvo240"))
                 img = volvoImage;
             else if (car.getModelName().equals("Saab95"))
@@ -70,5 +61,10 @@ public class DrawPanel extends JPanel {
                 );
             }
         }
+    }
+
+    @Override
+    public void update() {
+        repaint();
     }
 }

@@ -5,8 +5,12 @@ import java.awt.*;
 
 public class CarView extends JFrame {
 
-    private CarController carC;
+    private static final int X = 800;
+    private static final int Y = 600;
+
     private DrawPanel drawPanel;
+    private CarSimModel model;
+    private CarController carC;
 
     private JPanel controlPanel = new JPanel();
 
@@ -31,10 +35,11 @@ public class CarView extends JFrame {
     JSpinner gasSpinner = new JSpinner();
 
     public CarView(String framename, CarController cc, CarSimModel model) {
-
+        super(framename);
         this.carC = cc;
-
-        drawPanel = new DrawPanel(800, 600, model);
+        this.model = model;
+        drawPanel = new DrawPanel(X, Y - 240, model);
+        model.addObserver(drawPanel); // <-- lägg till denna rad
 
         this.setTitle(framename);
         this.setLayout(new BorderLayout());
@@ -85,6 +90,7 @@ public class CarView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
+
 
     public DrawPanel getDrawPanel() {
         return drawPanel;

@@ -106,6 +106,7 @@ public abstract class Vehicle implements Movable {
     public double getY() { return location.getY(); }
     public Direction getDirection() { return direction; }
 
+    // lägger till denna så vi slipper instanceof
     public String getModelName() {
         return modelName;
     }

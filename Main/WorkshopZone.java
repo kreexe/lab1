@@ -4,8 +4,8 @@ import java.awt.Rectangle;
 
 public class WorkshopZone<T extends Car> {
 
-    private int width;
-    private int height;
+    private int width = 175;
+    private int height = 175;
     private Workshop<T> workshop;
 
     public WorkshopZone(int width, int height, Workshop<T> workshop) {
